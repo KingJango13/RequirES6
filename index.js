@@ -21,3 +21,9 @@ function evalRE(transpiled){
 
 // Run code with a built in transpiler
 const transpileEval = (code) => evalRE(transpile(code))
+
+window.RequirES6 = window.RequirES6 || {
+  transpile: transpile,
+  evalRE: evalRE,
+  transpileEval: transpileEval
+}
