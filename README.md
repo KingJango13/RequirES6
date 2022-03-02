@@ -1,7 +1,7 @@
 # RequirES6
 ### Synchronized module loading in JavaScript (kind of)
-Use this API to execute a script with synchronized module loading.
-Scripts using this API will be executed asynchronously, meaning you can also use await in the global scope!
+Use this API to execute a script with synchronized module loading. Scripts using this API will be executed asynchronously, meaning you can also use await in the global scope!
+[Script URL](https://kingjango13.github.io/RequirES6/index.js)
 
 ## Functions
 #### transpile(code: string)
