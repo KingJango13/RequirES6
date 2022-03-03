@@ -15,12 +15,12 @@ function transpile(code){
     return x.split(" ").map(y => {
       var getRequire = captureStrFunc(y,"require");
       var getFetchSync = captureStrFunc(y,"fetchSync");
-      if(getRequire){
+      if(getRequire && getRequire.strArgs){
         y = y.replaceAll(getRequire.fullFunc,`await import(${getRequire.strArgs[0]})`);
       }
-      if(getFetchSync){
+      if(getFetchSync && getFetchSync.strArgs){
         var type = getFetchSync.strArgs[1];
-        y = y.replaceAll(getFetchSync.fullFunc,`await fetch(${getFetchSync.strArgs[0]})${type ? ".then(x => x." + type + "())" : ""}`);
+        y = y.replaceAll(getFetchSync.fullFunc,`await fetch(${getFetchSync.strArgs[0]})${type ? ".then(x => x." + type.replaceAll(/['"]/g,"") + "())" : ""}`);
       }
       return y;
     }).join(" ");
