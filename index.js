@@ -1,10 +1,11 @@
 // Helper function to get functions from a string
 function captureStrFunc(str,funcName){
   var rgx = new RegExp(`(?<=\\s|^)${funcName}\\((["'].*["'],?)*\\)`)
+  var match = str.match(rgx) || [null];
   return {
     rgx: rgx,
-    fullFunc: str.match(rgx)[0],
-    strArgs: str.match(rgx)[1].split(",")
+    fullFunc: match[0],
+    strArgs: match[1] ? match[1].split(",") : null
   }
 }
 
