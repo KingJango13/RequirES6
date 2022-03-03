@@ -14,7 +14,7 @@ function transpile(code){
       var getRequire = captureStrFunc(y,"require");
       var getFetchSync = captureStrFunc(y,"fetchSync");
       return y.replaceAll(getRequire.fullFunc,`await import(${getRequire.strArgs[0]})`)
-        .replaceAll(getFetchSync.fullFunc,`await fetch(${getFetchSync.strArgs[0]})${getFetchSync.strArgs[1] ? ".then(x => x." + getFetchSync.strArgs[1] + "())"}`)
+        .replaceAll(getFetchSync.fullFunc,`await fetch(${getFetchSync.strArgs[0]})${getFetchSync.strArgs[1] ? ".then(x => x." + getFetchSync.strArgs[1] + "())" : ""}`)
     }).join(" ")
   }).join(";")
 }
