@@ -1,13 +1,20 @@
+// Helper function to get functions from a string
+function captureStrFunc(str,funcName){
+  var rgx = new RegExp(`(?<=\\s|^)${funcName}\\((["'](.*)["'],?)*\\)`)
+  return {
+    fullFunc: str.match(rgx)[0],
+    strArgs: str.match(rgx)[1].split(",")
+  }
+}
+
 // Transpile the code to vanilla JS
 function transpile(code){
   return code.replaceAll("\n",";").split(";").map(x => {
     return x.split(" ").map(y => {
-      if(/require\(((['"]).*(['"]))*\)/g.test(y)){
-        var scriptURL = y.match(/(?<=['"]).*/g)[0]
-        console.log(scriptURL.substr(0,scriptURL.length - 1))
-        return `await import("${scriptURL.substr(0,scriptURL.length - 2)}")`
-      }
-      return y;
+      var getRequire = captureStrFunc(y,"require");
+      var getFetchSync = captureStrFunc(y,"fetchSync");
+      return y.replaceAll(getRequire.fullFunc,`await import(${getRequire.strArgs[0]})`)
+        .replaceAll(getFetchSync.fullFunc,`await fetch(${getFetchSync.strArgs[0]})${getFetchSync.strArgs[1] ? ".then(x => x." + getFetchSync.strArgs[1] + "())"}`)
     }).join(" ")
   }).join(";")
 }
